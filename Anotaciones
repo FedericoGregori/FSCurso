@@ -1,0 +1,723 @@
+Anotaciones Curso Full Stack Dev
+
+Se anotarán detalles técnicos como funciones y su descripción.
+
+Módulo 1
+
+JavaScript
+
+Tipos de nodos
+
+Document
+Element
+Attr
+Text
+Comment
+
+Menos relevantes:
+DocumentType, CDataSection, DocumentFragment, Entity, EntityReference, ProcessingInstruction y Notation
+
+Accediendo a los elementos
+
+Elemento específico:
+getElementById
+
+<p><a id="contacto" href="contactos.html">Contáctenos</a></p>
+
+var elementoContacto = document.getElementById("contacto");
+Ahora el valor de elementoContacto está referida al elemento [a] y cualquier operación sobre la misma afectará el hiperenlace
+
+Grupo de elementos:
+getElementsByTagName
+
+<ul>
+<li><a href="editorial.html">Editorial</a></li>
+<li><a href="autores.html">Autores</a></li>
+</ul>
+
+var hipervinculos = document.getElementsByTagName("a");
+
+El valor de la variable hipervínculos es una colección de elementos [a]. Las colecciones son arreglos.
+
+hipervinculos[0] el elemento [a] para "Editorial"
+
+Varios elementos de un documento HTML pueden ser accedidos de otras maneras, por ejemplo document.body, document.forms, document.images. Pero se recomiendan los métodos dados anteriormente.
+
+var body = document.getElementsByTagName("body")[0];
+
+Creando elementos y textos
+
+Métodos del objeto document.
+createElement(Tipo cadena)
+createTextNode(Cadena de texto)
+
+Crear un nuevo enlace de párrafo vacío:
+var nuevoEnlace = document.createElement("a");
+
+La variable nuevoEnlace ahora referencia un nuevo enlace listo para ser insertado en el documento. El texto que va dentro del elemento [a] es un nodo de texto hijo, por lo que debe ser creado por separado.
+var nodoTexto = document.createTextNode("Semblanza");
+
+Luego si desea modificar el nodo de texto ya existente, puede utilizarse la propiedad nodeValue, esta permite coger y poner el nodo de texto:
+
+var textoViejo = nodoTexto.nodeValue; //textoViejo quedó con Semblanza 
+nodoTexto.nodeValue = "Novedades"; //Ahora el nodeValue de nodoTexto es "Novedades"
+
+Se puede insertar un elemento o texto(nodo) como último hijo de un nodo ya existente usando el método appendChild. Este método coloca el nuevo nodo después de todos los hijos del nodo
+
+nuevoEnlace.appendChild(nodoTexto);
+
+Ahora se necesita insertar el enlace en el cuerpo del documento. Se necesita una referencia al elemento body del documento. Por ejemplo:
+
+var cuerpoDoc = document.getElementsByTagName("body")[0];
+cuerpoDoc.appendChild(nuevoEnlace);
+
+* Otra manera sería utilizando el método getElementById. Para ello se asume que la etiqueta <body> tiene asignado un valor para el atributo id.
+
+<body id="cuerpo">
+var cuerpoDoc = document.getElementById("cuerpo");
+cuerpoDoc.appendChild(nuevoEnlace);
+
+Existen básicamente tres maneras para insertar un nuevo elemento o nodo de texto. Todo depende del punto en el cual se desee insertar. Antes de otro nodo, reemplazo de un nodo, o como último hijo de un elemento.
+
+El último hijo ya fue visto.
+Para insertar un nodo, antes de otro nodo, se utiliza inserBefore de su elemento padre.
+EL reemplazo de nodo se utiliza el método replaceChild de su elemento padre.
+
+Al usar inserBefore se necesita referencia al nodo que va a ser insertado, y donde va a ser insertado.
+
+Dado el siguiente código:
+<p id="mwEnlaces"><a id="editor" href="editorial.html">Editorial</a></p>
+
+El nuevo enlace será insertado antes del enlace ya existente llamando el método insertBefore desde el nodo padre (párrafo)
+
+var textoNuevo = document.createTextNode("Actualidad");
+var etiquetaNueva = document.createElement("a");
+etiquetaNueva.appendChild(textoNuevo);
+var etiquetaExistente = document.getElementById("editor");
+var padre = etiquetaExistente.parentNode;
+
+var hijoNuevo = padre.insertBefore(etiquetaNueva, etiquetaExistente);
+
+Resultado:
+
+<p id="mwEnlaces">
+<a>Actualidad</a>
+<a id="editor" href="editorial.html">Editorial</a>
+</p>
+
+En el caso de reemplazar el enlace usando replaceChild:
+
+var hijoNuevo = padre.replaceChild(etiquetaNueva, etiquetaExistente);
+
+Resultado:
+<p id="mwEnlaces">
+<a>Actualidad</a>
+</p>
+
+Usando innerHTML
+
+En aplicaciones complejas donde es necesario crear varios elementos a la vez
+Puede crearse fácilmente una tabla con múltiples celdas e insertarla luego en la página con innerHTML:
+
+var tabla = '<table border="0">';
+tabla += '<tr><td>Celda 1</td><td>Celda 2</td><td>Celda 3</td></tr>';
+tabla += '</table>';
+
+document.getElementById("datos").innerHTML = tabla;
+
+Eliminando un elemento o nodo de texto
+
+Método removeChild
+Eliminar nodos hijos a cualquier nodo con tan sólo pasarle las referencias del nodo hijo a eliminar y su correspondiente padre.
+Ejemplo:
+
+<p id="mwEnlaces">
+<a id="editor" href="editorial.html">Editorial</a>
+</p>
+
+Se usará removeChild para eliminar el hipervínculo del elemento padre párrafo:
+
+var tag = document.getElementById("editor");
+var parent = tag.parentNode;
+
+var childRemoved = parent.removeChild(tag);
+
+La variable childRemoved fue removido, pero no destruido. No se localiza en el DOM, pero se encuentra disponible en memoria como si fuera creado usando el método createElement. Esto permite posicionarlo en cualquier otra parte de la página.
+
+Lectura y escritura de los atributos de un elemento
+
+Los atributos de un tag son traducidos por el navegador como propiedades de un objeto. Existen dos métodos para leer y escribir los atributos de un elemento.
+
+getAttribute: leer el valor del attr
+setAttribute: escribir el valor del attr
+
+En ocasiones se hace necesario ver las propiedades y métodos de un determinado elemento. Se puede realizar con la siguiente función:
+
+function inspector(elemento){
+    var str ="";
+    for (var i in elemento){
+        str+=I + ": " + elemento.getAttribute(i) + "\n";
+    }
+    alert(str)
+}
+
+Para usar la funcion inspector() tan sólo debe pasarle la referencia al elemento, continuando con el ejemplo anterior resulta:
+
+var elem = document.getElementById("editor");
+inspector(elem);
+
+Para modificar el atributo title del hipervínculo, el elemento referenciado por la variable tag, se usará el setAttribute, pasándole el nombre del atributo y el valor:
+
+var elem = document.getElementById("editor");
+elem.setAttribute("title","Artículos de programación");
+var nuevoTitulo = tag.getAttribute("title");
+//El valor de la variable nuevoTitulo es ahora "Artículos de programación".
+
+Manipulando estilos
+
+Repaso: Los atributos que le son asignados a las etiquetas HTML están disponibles como propiedades de sus correspondientes nodos en el DOM. Las propiedades de estilo pueden ser aplicadas a través del DOM.
+
+Cada atributo CSS posee una propiedad del DOM equivalente, formándose con el mismo nombre del atributo CSS peso sin los guiones y llevando la primera letra de las palabras a mayúsculas. Ejemplo:
+
+algun-atributo-css -> algunAtributoCss
+
+Para cambiar por ejemplo el atributo font-family, podría realizarse lo siguiente:
+
+tag.style.fontFamily = 'sans-serif';
+
+En caso de togglear elementos, se puede usar CSS display
+
+tag.style.display = 'none';
+
+Para volver a mostrar, se asigna otro valor
+
+tag.style.display = 'inline';
+
+************************************************************************************************************************
+
+Ejemplo 1: Adjuntar multiples ficheros a la vez
+Adición de tantos elementos input del tipo file como se deseen, para subir varios ficheros al servidor a la vez.
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Ejemplo para adjuntar múltiples ficheros</title>
+<script language="javascript" type="text/javascript">
+	function nuevoFichero() {
+	var input = document.getElementsByTagName("input")[0];
+	var nuevoInput = input.cloneNode(true);
+	input.parentNode.appendChild(nuevoInput);
+	}
+</script>
+</head>
+
+<body>
+    <form action="upload.php" method="post" enctype="multipart/form-data">
+    	<fieldset><legend>Adjuntar múltiples ficheros</legend>
+	    	<input name="ficheros[]" type="file" size="60" >
+    	</fieldset>
+    	<a href="javascript: nuevoFichero();">Adjuntar otro fichero</a>   
+    	<input name="Subir" type="submit" value="Adjuntar" >
+    </form>
+</body>
+</html>
+
+
+El enlace en 220 hace una llamada a nuevoFichero(), y ocurre lo siguiente:
+
+//Se accede al primer input del documento 
+var input = document.getElementsByTagName("input")[0];
+
+//Se usa cloneNode de input, y se almacena en nuevoInput
+var nuevoInput = input.cloneNode(true);
+
+//Se accede al parent de input mediante parentNode y se inserta un nuevo hijo copia por appendChild
+input.parentNode.appendChild(nuevoInput);
+
+************************************************************************************************************************
+
+Ejemplo 2: Validación de un formulario
+Verificar si se cumplen los requisitos antes de enviar el formulario al servidor 
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>Ejemplo 2: DOM y validación</title>
+	<script type="text/javascript">
+	function validar_claves() {
+		var c1 = document.getElementById('clave1').value;
+		var c2 = document.getElementById('clave2').value;
+		if (c1 == "" || c2 == "") 
+		{
+			alert("Debe ingresar la password y repetirla");
+			document.getElementById('clave1').focus();
+			return false;
+		}	 
+		if (c1 != c2)
+		{
+			alert("Las password no coinciden");
+			document.getElementById('clave1').focus();
+			return false;
+		}	
+		if (c1.length < 6) 
+		{
+			alert("La password debe tener al menos 6 caracteres");
+			document.getElementById('clave1').focus();
+			return false;
+		} 	
+		if (document.getElementById('menor18').checked && document.getElementById('mayor18').checked){
+			alert("Debe seleccionar solo una opcion");
+			return false;		
+		}
+		else if (!(document.getElementById('menor18').checked || document.getElementById('mayor18').checked)){			
+			alert("Debe seleccionar al menos una opcion");
+			return false;		
+		}	
+		return true;
+	}
+	</script>
+</head>
+<body>
+<h1>Registro de usuario</h1>
+	<form action="noimporta" method="get" onSubmit="return validar_claves()">
+		Ingrese su email: 
+		<input type="text" name="email"><br>
+		Ingrese su clave: 
+		<input type="password" name="clave" id="clave1"><br>
+		Repita su clave: 
+		<input type="password" id="clave2"><br>
+		Edad: <br>
+        Menor de 18 <input id="menor18" type="checkbox"> 
+        Mayor de 18 <input id="mayor18" type="checkbox"><br>
+		<input type="submit" value="Registrar">
+	</form>
+</body>
+</html>
+
+El formulario tiene asociado el evento onSubmit ante el cual se ejecuta la función de Js validar_claves()
+<form action="noimporta" method="get" onSubmit="return validar_claves()">
+
+El resultado de validar_claves() hará que se produzca el envío o no del formulario, es decir si la función devuelve true, se hará el envío del formulario correctamente, en caso contrario, si la función devuelve false, el envío no se hará y se habrán mostrado desde Js los popups con los errores correspondientes a través de los alert().
+
+alert("La contraseña debe tener al menos 6 caracteres");
+
+La línea
+
+document.getElementById('clave1').focus(); //Hace que el cursor sea posicionado en el cuadro de texto cuyo id es clave1.
+
+************************************************************************************************************************
+
+Ejemplo 3: Fechas en JavaScript
+Validar el envío de un nombre y fecha de nacimiento. Este ejemplo tiene varios archivos .js vinculados para que funcione.
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>Ejemplo 3: Fechas en javascript</title>
+
+	<link rel="stylesheet" type="text/css" href="calendar-win2k-cold-1.css" /> <!-- estilo -->
+	<script type="text/javascript" src="calendar.js"></script> <!-- principal -->
+	<script type="text/javascript" src="calendar-es.js"></script>  <!-- idioma -->
+	<script type="text/javascript" src="calendar-setup.js"></script> <!-- config -->
+
+	<script type="text/javascript">
+
+	function armar_calendario() {
+		Calendar.setup({
+		inputField     :    "nacim",    // id del input para fecha
+		ifFormat       :    "%d/%m/%Y", // formato
+		button         :    "abrircal", // id del bot�n que abre calendario
+		});
+	}
+
+	function validar_fecha() {
+
+		var f=document.getElementById('nacim').value;
+		
+		if (f == "") // que la fecha est�
+		{
+			alert("Por favor ingrese su fecha de nacimiento");
+			return false;
+		}
+
+		var elementos=f.split("/");
+		if (elementos.length != 3) //que tenga dos barras o tres subgrupos de nros
+		{
+			alert("La fecha ingresada no es v�lida.");
+			return false;
+		}
+
+		if (elementos[0]=="" || elementos[1]=="" || elementos[2]=="" ) //que los tres tengan algo
+		{
+			alert("La fecha ingresada no es v�lida..");
+			return false;
+		}
+
+		if (isNaN(elementos[0]) || isNaN(elementos[1]) || isNaN(elementos[2]) ) //que sean tres n�meros
+		{
+			alert("La fecha ingresada no es v�lida...");
+			return false;
+		}
+
+		//que sea una fecha de verdad
+		var prueba=new Date(elementos[2], elementos[1]-1, elementos[0]);
+		var anio=prueba.getFullYear();
+		var mes=prueba.getMonth();
+		var dia=prueba.getDate();
+
+		if (anio != elementos[2] || mes != elementos[1]-1 || dia != elementos[0])
+		{
+			alert("La fecha ingresada no es v�lida....");
+			return false;
+		}
+
+		//que no sea menor de 18 a�os
+		var fechahoy=new Date();
+		var aniohoy=fechahoy.getFullYear();
+		var meshoy=fechahoy.getMonth();
+		var diahoy=fechahoy.getDate();
+
+		if (prueba > fechahoy){
+			alert ("La fecha de nacimiento debe ser menor a la fecha actual");
+			return false;		
+		}
+		
+		if(mes > meshoy){ 
+			var edad = aniohoy - anio - 1; 
+		}
+		else{ 
+			if(mes == meshoy && dia>diahoy){ 
+				var edad = aniohoy - anio - 1;  
+			}
+			else{ 
+				var edad = aniohoy - anio; 
+			} 
+		} 
+		
+		if (edad < 18){
+			alert ("Debe ser mayor de 18 a�os");
+			return false;
+		} 
+		
+		return true;
+	}
+
+	</script>
+
+</head>
+<body onLoad="armar_calendario()">
+
+<h1>Fechas en javascript</h1>
+
+	<form action="noimporta" method="get" onSubmit="return validar_fecha()">
+
+		Ingrese su nombre: <input type="text" name="nombre" /> <br />
+		Ingrese su nacimiento: <input type="text" name="nacim" id="nacim" /> 
+		<input type="button" id="abrircal" value="..." /> <br />
+
+		<input type="submit" value="Send"/>
+
+	</form>
+
+</body>
+</html>
+
+// Este ejemplo trabaja de la misma manera que el anterior en cuanto a la validación de los datos en la etiqueta form se le agrega el evento onSubmit al cual se le asocia la función de Js validar_fecha().
+
+Se utiliza el método split() que divide un string en un array de substrings y retorna dicho array. Es utilizado para separar el día, mes y año.
+var elementos = f.split("/");
+
+La función isNaN(value) (is Not a Number) devuelve true si el parámetro pasado no es un número y false si lo es.
+if (isNaN(elementos[0]) || isNaN(elementos[1]) || isNaN(elementos[2]) ) //que sean tres números
+
+El objeto Date calcula la fecha del día si no recibe parámetros:
+var fechaHoy = new Date();
+
+Luego se utilizan los métodos getFullYear(), getMonth(), y getDate() para obtener año en 4 dígitos, mes y día.
+var anioHoy = fechahoy.getFullYear();
+var mesHoy = fechahoy.getMonth();
+var diaHoy = fechahoy.getDate();
+
+El objeto Date siempre devuelve una fecha a partir de los parámetros recibidos aunque no sean válidos, por ejemplo si le pasáramos Date(2013,10,39) no serían datos válidos ya que no existe el día 39, pero Date trata de convertir esos parámetros en una fecha válida y devuelve esa fecha, es por eso que para validar si la fecha es válida se hace a través del if: 
+
+if (anio != elementos[2] || mes != elementos[1]-1 || dia != elementos[0])
+
+el Objeto Date trabaja con los meses de 0 a 11, por eso se le resta 1 mes.
+var prueba=new Date(elementos[2], elementos[1]-1, elementos[0]);
+
+Lo mismo se hace en la comparación
+if (anio != elementos[2] || mes != elementos[1]-1 || dia != elementos[0])
+
+************************************************************************************************************************
+
+Ejemplo 4: Manipulación del DOM
+EL objetivo del siguiente ejemplo es ver como podemos agregar elementos HTML dinámicamente creando elementos y sus nodos de texto y como podemos modificar o agregar atributos de CSS desde Js.
+
+En el cuadro de texto ingresamos los nombres de una lista de invitados, los cuales se van mostrando a continuación, a través del agregado de un div por cada invitado ingresado, dentro del div id="lista" y se agrega un campo de input type="hidden" dentro del formulario que será el encargado de enviar la lista de invitados al archivo correspondiente que los procese.
+
+dentro del div id="lista" se agregará un div con un elemento [a] (vínculo para poder eliminar ese invitado del alista) por cada invitado agregado.
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+
+<title>Ejemplo 3: Manipulacion del DOM</title>
+
+	<script type="text/javascript">
+
+		var contador=0;
+		var totalinvitados=0;
+		function agregar() {
+			var inv=document.getElementById('ingreso'); //referencia al input
+
+			if (inv.value=="") return;
+
+			var nuevo = document.createElement("div"); //fila para agregar
+			nuevo.setAttribute("id", "invdiv"+contador); //id para borrar --- LUEGO
+			nuevo.style.fontFamily='sans-serif';
+			nuevo.style.fontSize=22;
+			nuevo.style.backgroundColor='yellow';
+//			nuevo.style.border='dotted';
+//			nuevo.style.display='none';			
+//			nuevo.style.display='inline';						
+
+			var txtnuevo= document.createTextNode( inv.value + ' '); //texto para la fila
+			nuevo.appendChild(txtnuevo); //meto texto
+
+			// ---------------- PARA ELIMINAR
+			var borrarnuevo = document.createElement("a"); //link para borrar
+			borrarnuevo.setAttribute("href", "#"); //id para borrar LUEGO
+			borrarnuevo.setAttribute("onClick", "borrar("+ contador +")"); //id para borrar LUEGO
+			borrarnuevo.style.fontFamily='sans-serif';
+			borrarnuevo.style.fontSize=15;	
+			borrarnuevo.style.fontStyle='italic';						
+
+			var txtborrarnuevo= document.createTextNode( "borrar" ); //texto para el link borrar
+			borrarnuevo.appendChild(txtborrarnuevo); 
+
+			nuevo.appendChild(borrarnuevo); //meto link para borrar
+			// ----------------
+
+			var caja=document.getElementById('lista'); //referencia a la div
+			caja.appendChild(nuevo); //meto fila
+			
+			var nuevoinput=document.createElement("input"); //para el form oculto
+			nuevoinput.setAttribute("type","hidden"); //ponerle HIDDEN, TEXT es para verlos
+			nuevoinput.setAttribute("name","inv[]");
+			nuevoinput.setAttribute("value",inv.value);
+			nuevoinput.setAttribute("id","invinput"+contador);
+
+			var formoculto=document.getElementById('formoculto'); //referencia al form
+			formoculto.appendChild(nuevoinput); //meto fila
+
+			//listo! agregado
+			contador++;
+			totalinvitados++;			
+
+			inv.value=""; //reseteo input
+			inv.focus();
+		}
+
+		function borrar(id) {
+			
+			//borro de la lista, la fila
+			var divborrar = document.getElementById('invdiv'+id);
+			var padre = divborrar.parentNode;
+			padre.removeChild(divborrar);
+			
+			//borro del form, el input
+			var inputborrar = document.getElementById('invinput'+id);
+			var padre = inputborrar.parentNode;
+			padre.removeChild(inputborrar);
+			
+			totalinvitados--;
+		}
+		
+		function validar(){
+			if (totalinvitados == 0){
+				alert("Debe haber alguna persona invitada");
+				return false;
+			}
+			return true;
+		}
+
+	</script>
+
+</head>
+<body>
+
+	<h1>Lista de invitados</h1>
+
+	Ingrese nombre del invitado: <br />
+	<input type="text" id="ingreso" /> <input type="button" value="Agregar a la lista" onClick="agregar()" />
+
+		<hr /> 
+
+	<div id="lista">
+	<h3> Lista de invitados </h3>
+	</div>
+
+		<hr />
+
+	<form action="noimporta" method="get" id="formoculto" onSubmit="return validar()">
+
+	<input type="submit" value="Enviar lista" />
+	</form>
+
+</body>
+</html>
+
+-------------------------------------------------------------------------------------------------------------------
+Clase Virtual | Módulo 1 | Unidad 2
+
+JQuery
+
+Ejecutar el código una vez que la página esté lista.
+
+$(document).ready(function(){
+
+//código que se va a ejecutar una vez que el DOM esté listo para recibir instrucciones.
+
+});
+
+Ésta  hace  referencia  a  una  función  a  ejecutar  una  vez  que  el  DOM  (Document  Object  Model)  de  la  página  está  listo.  Esto  es  así  porque  desde  JQuery  voy  a  manipular  los  elementos del html y para poder hacerlo necesito que el árbol de nodos que vimos en la unidad I esté terminado
+
+Selectores
+
+$("h1") //Selecciona todos los encabezados de nivel 1
+$("#idelemento") //Selecciona la etiqueta cuyo atributo id="idelemento"
+$(".miclase")
+$(".clase1.clase2")
+$("*") //Selecciona TODOS los elementos de la página
+$("div,p") //Selecciona todos los elementos div y p
+$(".clase1,.clase2") //Selecciona los elementos que tienen la clase "clase1" o "clase2"
+$("#miid,.miclase,ul") //Selecciona el elemento con id="miid", los elementos con class="miclase" y todas las listas ul
+
+var elem1 = $("#elem1");
+elem1.css("background-color", "#ff9999"); 
+
+var divs = $("div");
+divs.css("font-size", "32pt");  
+
+var nuevosElementos = $("<div>Elementos que creo en <b>tiempo de ejecución</b>.<h1>En ejecución...</h1></div>");
+nuevosElementos.appendTo("body");
+
+Selectores de Jerarquía
+
+Ancestor descendant:
+$("p b") //Selecciona todas las etiquetas B que hay dentro de las etiquetas p
+
+Parent > child
+$("p > b") //Selecciona todas las etiquetas B que son hijas directas de los párrafos
+
+prev + next
+$("p.parraforojo + p") //Esto selecciona los párrafos que están después de cualquier párrafo que tenga la clase "parraforojo"
+
+prev ~ siblings
+$("#miparrafo ~ table") //Selecciona los elementos TABLE que son hermanos del elemento con id="miparrafo"
+
+Atributos HTML
+
+attr()
+Trabajar con los atributos de los elementos de la página.
+
+Ejemplos:
+$("#campotexto").attr("value")
+$('li').attr("type","square"); A todas las etiquetas li estoy modificando el atributo type por square.
+
+Atributos CSS
+
+Para modificar atributos de css lo hacemos a través del método css().
+
+$("#micapa").css("color","green");
+
+$("#micapa").css({
+    "background-color":"#ff8800",
+    "position":"absolute",
+    "width":"100px"
+})
+
+Otros métodos
+
+.addclass()
+.hasclass()
+.height()
+.width()
+.InnerHeight() // Manejo del Padding, Margin, Border.
+.InnerWidth()
+.outerHeight()
+.outerWidth()
+.offset() //Posición real del elemento.
+.position() //La posición si no tuviera margen el elemento. No tiene en cuenta los márgenes.
+.removeClass()
+
+Callback de Funciones
+
+Lo que se conoce como "callback" es hacer una cola de funciones, hacer que una funcion se ejecute después de otra.
+
+$("#micapa").fadeOut(1000, function(){
+    $("#micapa").css({'top':300,'left':200});
+    $("#micapa").fadeIn(1000);
+})
+
+Se hace fadeout de un div, una vez que se ejecutó, se mueve top y left, y luego hace fadein.
+
+Eventos
+
+Los eventos son uno de los elementos más importantes en el desarrollo de aplicaciones web enriquecidas del lado del cliente, puesto que sirven para realizar acciones en la página a medida que el usuario realiza cosas con la página. Es decir, son la base para crear la interacción con el usuario.
+
+$(".miclase").click(funcion(){
+    $("#midiv").css("color","green");
+})
+
+
+click()
+dbclick()
+hover()
+mousedown()
+mouseup()
+mouseenter()
+mouseleave()
+mousemove()
+mouseout()
+mouseover()
+toggle()
+
+Eventos relacionados con el teclado
+
+keydown()
+keypress()
+keyup()
+
+Eventos combinados teclado y mouse
+
+focus()
+focusin()
+focusout()
+
+Efectos
+
+Es la manera que tenemos de hacer más atractivas nuestras páginas dotándolas de animaciones a través de distintos métodos.
+
+animate()
+
+Efectos short hand de animate:
+fadeIn()
+fadeOut()
+fadeTo()
+hide()
+show()
+slideDown()
+slideUp()
+toggle() //Switchea entre una alternativa y otra
+
+*En respuesta a un evento voy a hacer una accion, como por ejemplo un efecto
+
+Herramientas útiles
+
+Herramientas para desarrollador disponible en los navegadores
+Firebug (extension para Firefox)
+CodePen
+JSfiddle //Similar a CodePen muy completo
+
