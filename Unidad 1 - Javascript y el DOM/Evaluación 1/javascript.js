@@ -1,10 +1,12 @@
 const formulario = document.getElementById('formulario');
-const nombre = formulario.nombre;
-const apellido = formulario.apellido;
-const nac = formulario.nac;
-const email = formulario.email;
-const user = formulario.user;
-const pass = formulario.pass;
+const {
+  nombre,
+  apellido,
+  nac,
+  email,
+  user,
+  pass,
+} = formulario;
 const error = document.getElementById('error');
 const MINIMUN_LENGTH = 8;
 
