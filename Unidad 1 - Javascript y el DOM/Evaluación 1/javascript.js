@@ -44,7 +44,7 @@ function isValidLength(field, field_name) {
 
 formulario.addEventListener('submit', validarFormulario);
 let today = new Date();
-const dd = today.getDate();
+let dd = today.getDate();
 let mm = today.getMonth()+1;
 const yyyy = today.getFullYear();
  if(dd<10){
