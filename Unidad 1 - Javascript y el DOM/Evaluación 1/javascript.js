@@ -1,12 +1,12 @@
-var formulario = document.getElementById('formulario'),
-    nombre = formulario.nombre,
-    apellido = formulario.apellido,
-    nac = formulario.nac,
-    email = formulario.email,
-    user = formulario.user,
-    pass = formulario.pass,
-    error = document.getElementById('error');
-var MINIMUN_LENGTH = 8;
+const formulario = document.getElementById('formulario');
+const nombre = formulario.nombre;
+const apellido = formulario.apellido;
+const nac = formulario.nac;
+const email = formulario.email;
+const user = formulario.user;
+const pass = formulario.pass;
+const error = document.getElementById('error');
+const MINIMUN_LENGTH = 8;
 
 function validarFormulario(e){
     error.innerHTML = '';
@@ -43,10 +43,10 @@ function isValidLength(field, field_name) {
 }
 
 formulario.addEventListener('submit', validarFormulario);
-var today = new Date();
-var dd = today.getDate();
-var mm = today.getMonth()+1;
-var yyyy = today.getFullYear();
+let today = new Date();
+let dd = today.getDate();
+let mm = today.getMonth()+1;
+const yyyy = today.getFullYear();
  if(dd<10){
         dd='0'+dd
     }
