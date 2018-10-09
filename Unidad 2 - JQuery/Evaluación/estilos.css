@@ -1,0 +1,94 @@
+html {
+    font-family: Arial, Helvetica, sans-serif;
+}
+body {
+    background: url('fondo1.jpg');
+}
+
+.container {
+    margin: 0 80px 25px 80px;
+    display: grid;
+    grid-gap: 20px;
+    grid-template-columns: 1fr 3fr;
+    grid-template-rows: repeat(4, 1fr);
+    grid-template-areas:
+        "item   content"
+        "item2  content"
+        "item3  content"
+        "item4  content";
+}
+
+.item {
+    grid-area: item;
+    display: none;
+}
+
+.item img{
+    width: 200px;
+    height: 150px;
+}
+
+.item2 {
+    grid-area: item2;
+    color: white;
+    font-size: 14px;
+    display: none;
+}
+
+.item3 {
+    grid-area: item3;
+    display: none;
+}
+
+.item3 img{
+    width: 150px;
+    height: 150px;
+}
+
+.item4 {
+    grid-area: item4;
+    justify-self: auto;
+    align-self: auto;
+    color: red;
+    font-size: 14px;
+    display: none;
+}
+
+.content {
+    margin-top: 30px;
+    padding: 15px;
+    color: white;
+    background: rgba(0, 0, 0, 0.5);
+    grid-row: 1 / -1;
+    font-size: 20px;
+    opacity: 0;
+}
+
+h1 {
+    margin: 0;
+}
+
+h2 {
+    grid-area: vercontacto;
+    grid-column: 2 / -1;
+    margin-top: 80px;
+    color: red;
+    justify-self: end;
+    align-self: end;
+}
+
+div .contacto {
+    grid-area: contacto;
+    grid-column: 1 / 1;
+    color: white;
+    background: red;
+    text-align: center;
+    display: none;
+}
+
+.info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template: 1fr;
+    grid-template-areas: "contacto  vercontacto";
+}

@@ -585,11 +585,11 @@ $(document).ready(function(){
 
 Selectores
 
+$("*") //Selecciona TODOS los elementos de la página
 $("h1") //Selecciona todos los encabezados de nivel 1
 $("#idelemento") //Selecciona la etiqueta cuyo atributo id="idelemento"
 $(".miclase")
 $(".clase1.clase2")
-$("*") //Selecciona TODOS los elementos de la página
 $("div,p") //Selecciona todos los elementos div y p
 $(".clase1,.clase2") //Selecciona los elementos que tienen la clase "clase1" o "clase2"
 $("#miid,.miclase,ul") //Selecciona el elemento con id="miid", los elementos con class="miclase" y todas las listas ul
@@ -608,25 +608,60 @@ Selectores de Jerarquía
 Ancestor descendant:
 $("p b") //Selecciona todas las etiquetas B que hay dentro de las etiquetas p
 
+$("p.parraforojo i") //Selecciona todas las etiquetas I que hay dentro de los párrafos con clase "parraforojo".
+
 Parent > child
 $("p > b") //Selecciona todas las etiquetas B que son hijas directas de los párrafos
+$("#capa > *") //selecciona todas las etiquetas que son hijas directas del elemento con id="capa"
 
 prev + next
 $("p.parraforojo + p") //Esto selecciona los párrafos que están después de cualquier párrafo que tenga la clase "parraforojo"
 
+Con este selector conseguimos acceder a las elementos que están después de otros, es decir, a las etiquetas que concuerdan con el selector "next", que se abren después de cerrar las etiquetas que concuerdan con el selector "prev".
+
 prev ~ siblings
 $("#miparrafo ~ table") //Selecciona los elementos TABLE que son hermanos del elemento con id="miparrafo"
+
+Los elementos hermanos son los que están en el mismo contenedor y se encuentran en el mismo nivel de jerarquía. 
 
 Atributos HTML
 
 attr()
 Trabajar con los atributos de los elementos de la página.
 
+El uso es bien simple. Dado un objeto jQuery, invocando el método attr() sobre él, podemos acceder a sus atributos, para recuperar sus valores, modificarlos o eliminarlos.
+
 Ejemplos:
+El primer uso de attr() es para recuperar el valor de un atributo. 
 $("#campotexto").attr("value")
+
+Uso de attr() en el que no leemos el atributo, sino que lo modificamos. 
 $('li').attr("type","square"); A todas las etiquetas li estoy modificando el atributo type por square.
 
+También podemos utilizar el método attr() pasando un objeto con pares atributo/valor. Esto sirve para modificar de una sola vez varios atributos sobre los elementos que haya en un objeto jQuery y si esos atributos no existían, simplemente los crea con los valores enviados en el objeto.
+
+Imaginemos que tenemos varios enlaces en la página, y que queremos modificar sus atributos, para todos los enlaces a la vez.
+
+$('a').attr({
+	'title': 'Title modificado por jQuery',
+	'href': 'http://www.google.com',
+	'style': 'color: #f80'
+}); 
+
+Para ilustrar este uso de attr() mostraremos un ejemplo en el que desde jQuery accedemos a los elementos INPUT de la página que tienen la clase CSS "fecha" y le insertamos como texto a mostrar la fecha de hoy. 
+
+$('input.fecha').attr("value", function(indiceArray){
+	//indiceArray tiene el índice de este elemento en el objeto jQuery
+	var f = new Date();return f.getDate() + "/" + (f.getMonth() +1) + "/" + f.getFullYear();
+	}); 
+
+
+removeAttr(), simplemente recibe una cadena con el nombre del atributo que queremos eliminar y lo borra del elemento. 
+
 Atributos CSS
+
+$("#micapa").css("color"); 
+Esto nos devolverá el atributo "color" de ese elemento.
 
 Para modificar atributos de css lo hacemos a través del método css().
 
@@ -638,7 +673,37 @@ $("#micapa").css({
     "width":"100px"
 })
 
-Otros métodos
+$("#micapa").mouseover(function(){
+	antiguoLeft = parseInt($(this).css("left"));
+	//alert (antiguoLeft);
+	$(this).css("left", antiguoLeft + 10 + "px");
+})     
+
+Con esto estamos definiendo un evento onmouseover sobre la capa con id="micapa", por lo que estas instrucciones se pondrán en ejecución cuando se pase el mouse por encima de la capa. 
+
+Dentro del método estamos haciendo un par de cosas. 
+
+Como primer paso estamos extrayendo el valor de la propiedad CSS "left" y convirtiéndola en un entero. 
+
+Como segundo paso estamos actualizando ese valor de "left" y asignando un nuevo valor que sería 10 píxeles más que el valor antiguo. 
+Para ello sumamos 10 al valor antiguo de "left" y lo concatenamos con la unidad de medida "px".  
+
+
+Cambiar un único atributo y colocar el valor según el resultado de una función
+
+$("#micapa").click(function(){
+	$(this).css("width", function(index, value){
+	//alert (value);
+	var aumento = prompt("cuanto quieres aumentar?", "25");      return (parseInt(value) + parseInt(aumento)) + "px";
+	   });
+	})     
+	
+	Como se puede ver, se define un evento clic sobre una capa. Luego utilizamos el método css() sobre el elemento, para cambiar el atributo width. 
+	El valor de width que se colocará será lo que devuelva la función indicada como segundo parámetro en el método css(). 
+	Si nos fijamos, la función devuelve un valor, que es lo que se colocará en el atributo width. 
+
+
+Otros métodos dentro de la categoría CSS
 
 .addclass()
 .hasclass()
@@ -652,7 +717,37 @@ Otros métodos
 .position() //La posición si no tuviera margen el elemento. No tiene en cuenta los márgenes.
 .removeClass()
 
+Ejemplo 
+
+<script>
+	$(document).ready(function(){
+		$("a").mouseover(function(event){
+			$("#capa").addClass("clasecss");
+		});
+		$("a").mouseout(function(event){
+			$("#capa").removeClass("clasecss");
+			});
+		});
+</script>
+</head>
+<body>
+	<div id="capa">Esta capa es independiente y voy a añadir y eliminar clases css sobre ella</div>
+	<br>
+	<br>
+	<a href="#">Añadir y quitar clase en la capa de arriba</a>
+</body>
+</html>
+
+
 Callback de Funciones
+
+Simplemente tenemos que saber que todas las funciones o métodos de jQuery pueden recibir un parámetro adicional con el nombre de la función que se tiene que ejecutar después que termine el procesamiento de la primera. 
+Esa segunda función que se ejecuta después de la primera es la que se conoce en inglés por callback. 
+Un ejemplo sencillo para entenderlo.
+
+miFuncion ("parametros de la funcion", function(){
+	funcionCallback();
+});  
 
 Lo que se conoce como "callback" es hacer una cola de funciones, hacer que una funcion se ejecute después de otra.
 
@@ -696,16 +791,84 @@ focus()
 focusin()
 focusout()
 
+
+Objeto Evento
+
+Vamos a ver como averiguar la posición del mouse al hacer click. 
+En el objeto evento, entre  otras  muchas  cosas,  existen  dos  propiedades  que  nos  informarán  sobre  la  posición del mouse al producirse ese evento:  
+	pageX: que nos informa sobre el número de píxeles desde el lateral izquierdode la página. 
+	pageY: con el número de píxeles desde la parte de arriba de la página.
+
+$(document).click(function(e){
+	alert("X: " + e.pageX + " - Y: " + e.pageY)
+});
+
+Por ejemplo, con este código mostramos la posición del mouse al moverlo por la página, mostrando las coordenadas en el texto de los titulares h1 que pueda haber en la página: 
+
+$(document).mousemove(function(e){   
+	$("h1").html("X: " + e.pageX + " - Y: " + e.pageY)
+});
+
+
+Ejemplo: Saber qué tecla se está presionando.
+Escribimos en la capa con id "loescrito" el código de Unicode de esa tecla y luego su conversión a un carácter normal, a través de la función estática de la clase String fromCharCode().
+
+<html>
+<head>
+	<title>Trabajando con eventos de teclado en jQuery</title>
+	<script type="text/javascript" src="jquery-1.10.2.min.js"></script>
+	<script>
+		$(document).ready(function(){
+			$("#mitexto").keypress(function(e){
+		    	e.preventDefault();
+				$("#loescrito").html(e.which + ": " + String.fromCharCode(e.which))
+			});
+		})
+	</script>
+</head>
+<body>
+	<h1>Eventos de teclado en jQuery</h1>
+	<h2>Averiguar qué tecla se está pulsando</h2>
+	<form>
+	    <textarea cols=300 rows=2 id="mitexto">Escribe algo aquí!</textarea>
+		<br>
+		<b>Tecla pulsada:</b>
+		<br>      
+		<div id="loescrito"></div>
+	</form>
+</body>
+</html>
+
 Efectos
 
 Es la manera que tenemos de hacer más atractivas nuestras páginas dotándolas de animaciones a través de distintos métodos.
 
 animate()
 
+Para  invocar  al  método  animate()  tenemos  que  indicar  una  serie  de  parámetros,  aunque sólo uno de ellos será obligatorio. La lista es la siguiente:
+
+.animate(Propiedades,[Duración],[Función de animación],[Callback])  
+
+Propiedades es obligatorio.
+
+Función de la animación: "swing" (por defecto) y "linear".
+
 Efectos short hand de animate:
+
 fadeIn()
+- Transición suavizada que acaba con el valor de opacity 1.
 fadeOut()
+- Transición suavizada que acaba con el valor de opacity cero.
 fadeTo()
+- var opacidad_deseada = $("#selopacidad").attr("value");
+	$("#e1").fadeTo(500, opacidad_deseada, function(){
+		$("#e2").fadeTo(500, opacidad_deseada, function(){
+			$("#e3").fadeTo(500, opacidad_deseada);
+	    });
+	}); 
+
+Ejemplo completo de Transiciones en ejemplo16.html
+
 hide()
 show()
 slideDown()
@@ -713,6 +876,136 @@ slideUp()
 toggle() //Switchea entre una alternativa y otra
 
 *En respuesta a un evento voy a hacer una accion, como por ejemplo un efecto
+
+Cola de Efectos
+
+<script languague="javascript">
+function colaEfectos(){
+	capa = $("#micapa");
+	capa.animate({
+		"font-size": "1.5em"
+	}, 2000);
+	capa.hide(1000);
+	capa.show(1000);
+	capa.animate({
+		"left": "350px",
+		"top": "50px"
+	},1500);
+	capa.animate({
+		"font-size": "0.75em"
+	}, 2000);
+	capa.animate({
+		"left": "100px",
+		"top": "20px"
+	}, 1500, colaEfectos);
+}
+$(document).ready(function(){
+	colaEfectos();
+});
+</script>
+
+Habría que fijarse que la última de las funciones de efecto invocadas hace una llamada a esta misma función, por medio de un callback, por lo que, cuando terminen de ejecutarse todos los efectos, se volverá a invocar a la función y se producirá así un bucle infinito, donde se repetirá todo el tiempo la misma secuencia de efectos.
+
+Método queue() en la cola de efectos 
+
+Si llamamos al método queue() sin parámetros o pasándole una cadena con el nombre de una cola, nos devolverá un array con cada una de las funciones que están encoladas en ese momento.
+
+Si no indicamos parámetros a queue() estamos indicando que nos pase la lista de eventos encolados en la cola predeterminada. Si se indica un parámetro de tipo cadena, que sería el nombre de la cola a examinar, lo que nos devuelve es el array de funciones de la cola con nombre indicado en el parámetro.
+
+Nota: El nombre de la cola predeterminada es "fx", por lo que llamar a la función:  
+elemento.queue("fx"); 
+Tendría el mismo efecto que llamarla sin parámetros. 
+elemento.queue();
+
+function muestraRestantesCola(){   
+	var numFuncionesEnCola = $("#micapa").queue().length;
+	$("#mensaje").text("En el momento de hacer el último clic en los botones hay " + numFuncionesEnCola + " funciones de efectos en cola")
+} 
+
+Ejemplo completo en ejemplo18.html
+
+Usando queue() para cualquier funcion
+
+.queue([nombreCola],callback(continua))
+
+Primer parámetro nombreCola, que es opcional, se indica el nombre de la cola donde encolar una función. Si no se indica nada, o si se indica el nombre de la cola predeterminada "fx", se encola esa función en la cola por defecto que gestiona jQuery por nosotros. 
+Si se indica cualquier valor distinto de "fx" se encolará en esa cola que estemos indicando. 
+El segundo parámetro es la función que se desea encolar. Al encolarla se coloca como última de las funciones a ejecutar de la cola, por tanto, se tendrán que ejecutar todas las funciones encoladas anteriormente antes de llegar a ésta que estamos introduciendo.
+
+$("#botoncomenzar").click(function(){ 
+	capa = $("#micapa");
+	//encolo directamente funciones que son efectos
+	capa.animate({"width": "80px"}, 1000);   
+	//para encolar otras funciones utilizo queue()   
+	capa.queue(function(){
+		$(this).css({
+		   "border": "3px solid #339",
+	    });
+		$("#botoncomenzar").text("Acabo de ponerle el borde... ");
+		$(this).dequeue();
+	});
+	capa.animate({"height": "200px"}, 2000);
+	capa.queue(function(continua){
+		$(this).css({
+			"border": "0px"
+		});
+		$("#botoncomenzar").text("Quitado el borde... ");
+		//el parámetro continua es una función que lleva al siguiente paso de la cola (jpara Query 1.4)
+		continua();
+		});
+		capa.animate({
+			"height": "50px",
+			"width": "400px"
+			}, 1000);
+		});
+
+Parar la ejecución de una cola
+
+.queue( [ nombreCola ], arrayFunciones ) 
+
+En éste uso del método queue() enviamos dos parámetros: 
+•El primer parámetro opcional con el nombre de la cola (por defecto si no se indica nada se entiende la cola "fx" que es la predeterminada.  
+•El segundo parámetro es un array de funciones que se cargarán en la cola. Las funciones que pudiera haber en la cola se descartarán y se encolarán las nuevas funciones que se indican en el Array, cuya ejecución también será secuencialmente, tal como estén ordenadas en el array.
+
+$("#elemento").stop(); 
+Esto terminaría con el efecto que se está ejecutando en la cola, pero continuaría con los siguientes efectos que pudiera haber encolados. 
+
+$("#elemento").stop(true); 
+Terminaría con el efecto que se esté realizando y limpiaría la cola, con lo que no se ejecutarían otras funciones que pudiera haber.
+
+$("#elemento").stop(false, true); 
+Terminaría el efecto actual pero saltaría en la animación para mostrar directamente el estado al que se llegaría si el efecto huviese continuado hasta el final. Luego continuaría automáticamente con la siguiente función de la cola.
+
+Método delay() para retrasar la ejecución de efectos de la cola
+
+.delay(duaracion, [nombreCola])
+
+•El parámetro duración sirve para indicar los milisegundos de espera que tienen que producirse entre efecto y efecto. 
+•El parámetro nombreCola está para indicar en qué cola de efectos se desea realizar ese retardo. Este segundo parámetro es opcional y si no lo indicamos se realizará la espera en la cola de efectos predeterminada. 
+
+capa.slideUp(1000).delay(2000).slideDown(1000); 
+
+Ejemplo general
+
+<script>
+	function colaEfectos(){
+		capa = $("#micapa");
+		capa.slideUp(1000);
+		capa.delay(2000);
+		capa.slideDown(1000);
+		
+		capa.fadeTo(1500, 0.3).delay(3000).fadeTo(500, 1);
+		
+		capa.delay(500);  
+		capa.animate({
+			"font-size": "+=0.5em"
+		}, 1000, colaEfectos);
+		//alert (capa.queue().length)} 
+		
+	$(document).ready(function(){
+	   colaEfectos();
+	});
+</script>
 
 Herramientas útiles
 
