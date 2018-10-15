@@ -1,3 +1,6 @@
+/* Buen día profe:
+    Tuve muchas dudas con esta consigna, y me costó entender algunos conceptos. Creo que ya manejo la idea con claridad, puesto que ejercité con 2 o 3 casos más. Pero mi sintaxis para manipular las opciones por defecto es las que muestra la documentación oficial de JQuery, puesto que bajando varios plugins aleatorios, me encontré con esta forma de escribirla. Pequeña aclaración de por qué no utilicé la propuesta por su bibliografía. Gracias
+*/
 
 jQuery.fn.evalslider = function(options){
     var config = $.extend({
