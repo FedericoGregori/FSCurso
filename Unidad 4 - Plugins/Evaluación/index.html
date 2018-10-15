@@ -11,7 +11,11 @@
 	<script>
 		
 		$(document).ready(function(){
-				$(".imagenes").evalslider('fadeIn', 2000, 10000);
+				$(".imagenes").evalslider({
+       									efecto: 'slideDown',
+        								velocidadEfecto: 2500,
+        								tiempoPausa: 5000,
+    								});
 		});
 
 	</script>
