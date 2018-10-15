@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Documento sin t&iacute;tulo</title>
+   <script type="text/javascript" src="jquery-1.10.2.min.js"></script>
+<script>
+$(document).ready(function(){
+	$("div").each(function(i){
+	   elemento = $(this);
+	   if(elemento.html() == "white")
+		  return true;
+	   if(elemento.html() == "nada")
+		  return false;
+	   elemento.css("color", elemento.html());
+	}); 
+});
+</script>
+
+</head>
+<!--
+La función que enviamos como parámetro a each() puede devolver valores y dependiendo de éstos, conseguir comportamientos parecidos a los conocidos break o continue de los bucles Javascript.
+
+Si la función devuelve "false", se consigue detener por completo el proceso de iteraciones de each(). Esto es como si hiciéramos el típico "break".
+
+Si la función devuelve "true", se consigue pasar directamente a la próxima iteración del bucle. Es como hacer el típico "continue".
+
+Veamos un ejemplo: queremos hacer un recorrido a esos DIV y en cada uno, mirar el texto que aparece. Entonces colocaremos como color del texto del DIV el color que aprece escrito en el DIV. Pero con dos casos especiales:
+
+    Si el texto del DIV es "white", entonces no queremos hacer nada con ese elemento.
+    Si el texto del DIV es "nada", entonces detendremos el bucle y dejaremos de colorear los siguientes elementos. 
+
+-->
+<body>
+    <div>red</div>
+    <div>blue</div>
+    <div>red</div>
+    <div>white</div>
+    <div>red</div>
+    <div>green</div>
+    <div>orange</div>
+    <div>red</div>
+    <div>nada</div>
+    <div>red</div>
+    <div>blue</div> 
+</body>
+</html>

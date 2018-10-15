@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Documento sin t&iacute;tulo</title>
+   <script type="text/javascript" src="jquery-1.10.2.min.js"></script>
+<script>
+$(document).ready(function(){
+   $("p").each(function(i){
+      if(i%2==0){
+         $(this).css("background-color", "#eee");
+      }else{
+         $(this).css("background-color", "#ccc");
+      }
+   });
+});
+</script>
+
+</head>
+
+<body>
+    <p>Primer párrafo</p>
+    <p>Otro párrafo</p>
+    <p>Tecer párrafo</p>
+    <p>Uno más</p>
+    <p>y acabo...</p>
+</body>
+</html>
+<!--
+Each es un método que se utiliza sobre un conjunto de elementos que hayamos seleccionado con la función jQuery. Con each realizamos una iteración por todos los elementos del DOM que se hayan seleccionado.
+
+El método each recibe una función que es la que se tiene que ejecutar para cada elemento y dentro de esa función con la variable "this" tenemos una referencia a ese elemento del DOM. Adicionalmente, la función que se envía a each, puede recibir un parámetro que es el índice actual sobre el que se está iterando.
+
+Por ejemplo, veamos esta línea de código:
+
+$("p").css("background-color", "#eee");
+
+Como ya sabemos, con $("p") seleccionamos todos los párrafos de la página. Luego con el método CSS asignamos un estilo, en este caso para cambiar el color del fondo. Esto en realidad jQuery lo hace con una iteración con todos los párrafos de la página, sin que tengamos que hacer nosotros nada más. ¿Pero qué pasa si queremos cambiar el fondo de los párrafos utilizando colores alternos?
+
+Imaginemos que tenemos una serie de párrafos en la página y queremos cambiar el color de fondo a los mismos, de manera que tengan colores alternos, para hacer dinámicamente un típico diseño para los listados.
+
+Entonces podríamos hacer lo siguiente: 
+-->

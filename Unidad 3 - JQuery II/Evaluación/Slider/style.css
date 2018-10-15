@@ -1,0 +1,59 @@
+.imagenes{
+    width: 600px;
+    height: 450px;
+    border: 1px solid grey;
+    position: relative;
+    overflow: hidden;
+    background-image: url(foto1.jpg)
+}
+
+#foto1 {
+    position: absolute;
+    z-index: 2;
+}
+
+#foto2 {
+    position: absolute;
+    z-index: 1;
+}
+
+#foto3 {
+    position: absolute;
+    z-index: 0;
+}
+
+#texto1, #texto2, #texto3{
+    display: none;
+    position: absolute;
+    z-index: 3;
+    text-align: center;
+    width: 600px;
+    height: 30px;
+    padding-top: 10px;
+    vertical-align: bottom;
+    background-color: #000000;
+    color: #FFFFFF;
+    opacity: 0.7;
+    font-size: 20px;
+}
+
+#texto1 {
+    display: block;
+}
+
+.cuadraditos {
+    display: flex;
+    width: 600px;
+    justify-content: center;
+}
+
+.i1, .i2, .i3 {
+    margin: 5px;
+    border: 5px solid black;
+    width: 50px;
+    height: 50px;
+}
+
+.i1 {
+    background: grey;
+}

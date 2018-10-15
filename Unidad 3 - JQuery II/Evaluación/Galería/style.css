@@ -1,0 +1,47 @@
+* {
+    margin: 0;
+}
+
+body {
+    background: rgba(0, 0, 0, 0.418);
+    display: flex;
+}
+
+
+.container {
+    justify-content: space-between;
+    width: 650px;
+	margin: 150px auto;
+}
+
+img {
+    border: 2.5px solid whitesmoke;
+    box-shadow: 10px 10px 38px 0px rgba(0,0,0,0.75);
+
+}
+
+.previa {
+    justify-items: center;
+    background: rgba(0,0,0,0.5);
+    display: none;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    left: 0;
+    top: 0;
+    overflow: scroll;
+    margin: auto;
+    text-align: center;
+}
+
+.piefoto {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 36px;
+    color: whitesmoke;
+    text-decoration: underline whitesmoke;
+}
+
+.close {
+    position: absolute;
+    border: transparent;
+}
