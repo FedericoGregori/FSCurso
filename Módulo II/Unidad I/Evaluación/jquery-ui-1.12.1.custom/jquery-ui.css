@@ -592,6 +592,7 @@ button.ui-button::-moz-focus-inner {
 	width: 90%;
 	overflow: hidden;
 	text-overflow: ellipsis;
+	color: white;
 }
 .ui-dialog .ui-dialog-titlebar-close {
 	position: absolute;

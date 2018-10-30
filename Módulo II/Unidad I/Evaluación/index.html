@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Federico Gregori - Evaluación Módulo 2 - Únidad 1</title>
+    <link rel="stylesheet" href="estilos.css">
+    <link rel="stylesheet" href="jquery-ui-1.12.1.custom/jquery-ui.css">
+    <script src="jquery-ui-1.12.1.custom/external/jquery/jquery.js"></script>
+    <script src="jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+</head>
+<body>
+    <div class="contenedor">
+        <form action="" id="formulario">
+            <div class="contenedor-inputs">
+                <input type="text" name="nombre" placeholder="Nombre">
+                <input type="text" name="apellido" placeholder="Apellido">
+                <input type="email" name="email" placeholder="Correo">
+                <input type="number" name="tel" placeholder="Teléfono">
+                <input type="text" name="user" placeholder="Usuario" pattern="[a-zA-Z0-9_-]{8,32}" style="margin-bottom: 5px">
+                <span id="user">*Sólo carácteres alfanuméricos</span><input type="password" name="pass" placeholder="Contraseña">
+                <span>Fecha de Nacimiento:</span><input type="date" id="nac" name="nac">
+
+                <ul class="error" id="error"></ul>
+            </div>
+            <input type="button" class="btn" id="disparador" value="Enviar"/>
+            
+            <div id="confirmacion" title="Confirmación">
+              <p>
+                <span class="ui-icon ui-icon-alert" style="float:left; margin: 0px 7px 0px 0;"></span>
+                Ha completado todos los datos.<br><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Confirma el envío
+              </p>
+            </div>
+        </form>
+    </div>
+    <script src="javascript.js"></script>
+</body>
+</html>
