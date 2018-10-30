@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="us">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Datepicker</title>
+	<link href="css/hot-sneaks/jquery-ui-1.9.2.custom.css" rel="stylesheet">
+	<script src="js/jquery-1.8.3.js"></script>
+	<script src="js/jquery-ui-1.9.2.custom.js"></script>
+	
+	<script type="text/javascript">
+		var RangeDates = ["03/10/2014", "04/10/2014, 04/20/2014", "12/13/2014, 12/21/2014", "12/30/2014, 01/02/2015", "12/26/2015, 01/03/2016"];
+		var RangeDatesIsDisable = true;
+		function DisableDays(date) {
+			var isd = RangeDatesIsDisable;
+			var rd = RangeDates;
+			var m = date.getMonth();
+			var d = date.getDate();
+			var y = date.getFullYear();
+			var fecha=new Date(y, m-1, d);
+			for (i = 0; i < rd.length; i++) {
+				var ds = rd[i].split(',');
+				var di, df;
+				var m1, d1, y1, m2, d2, y2;
+
+				if (ds.length == 1) {
+					di = ds[0].split('/');
+					m1 = parseInt(di[0]);
+					d1 = parseInt(di[1]);
+					y1 = parseInt(di[2]);
+					if (y1 == y && m1 == (m + 1) && d1 == d) return [!isd];
+				} else if (ds.length > 1) {
+					di = ds[0].split('/');
+					df = ds[1].split('/');
+					m1 = parseInt(di[0]);
+					d1 = parseInt(di[1]);
+					y1 = parseInt(di[2]);
+					var fechadesde=new Date(y1, m1-2, d1);
+					m2 = parseInt(df[0]);
+					d2 = parseInt(df[1]);
+					y2 = parseInt(df[2]);
+					var fechahasta=new Date(y2, m2-2, d2);
+					
+					if (fecha >= fechadesde && fecha <= fechahasta){
+						return [!isd];		
+					}
+				}
+			}
+			return [isd];
+		}
+	
+	$(document).ready(function(){
+		
+		$( "#datepicker" ).datepicker({
+			inline: true,
+			numberOfMonths: 3,
+			beforeShowDay: DisableDays
+		});
+			
+	});
+	</script>
+	<style>
+	body{
+		font: 62.5% "Trebuchet MS", sans-serif;
+		margin: 50px;
+	}
+	.demoHeaders {
+		margin-top: 2em;
+	}
+	
+	</style>
+</head>
+<body>
+
+
+<!-- Datepicker -->
+
+<h2 class="demoHeaders">Bloquear/Desbloquear disponibilidad</h2>
+
+<div id="datepicker" style="padding:15px 0 15px 0;"></div> 
+
+</body>
+</html>
